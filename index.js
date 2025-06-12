@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   res.send('Node + MongoDB app is running!');
 });
 app.get('/getMsg', (req, res) => {
-    res.send('Node + MongoDB app is running1!');
+    res.send('Node + MongoDB app is running2!');
   });
 
   app.get('/employees', async (req, res) => {
