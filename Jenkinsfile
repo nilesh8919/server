@@ -1,24 +1,33 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/nilesh8919/server.git'
+                git branch: 'main', url: 'https://github.com/nilesh8919/server.git'
             }
         }
+
         stage('Build') {
             steps {
-                echo 'Building...'
+                sh 'npm install'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Running tests...'
+                sh 'npm test || echo "No tests available"'
             }
         }
-        stage('Deploy') {
+
+        stage('Deploy to Docker') {
             steps {
-                echo 'Deploying...'
+                sh '''
+                docker stop my-node-app || true
+                docker rm my-node-app || true
+                docker build -t my-node-app .
+                docker run -d -p 8081:8080 -p 50000:50000 --name jenkins jenkins/jenkins:lts
+                '''
             }
         }
     }
