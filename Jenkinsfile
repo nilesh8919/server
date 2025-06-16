@@ -23,10 +23,10 @@ pipeline {
         stage('Deploy to Docker') {
             steps {
                 sh '''
-                docker stop my-node-app || true
-                docker rm my-node-app || true
-                docker build -t my-node-app .
-                docker run -d -p 8081:8080 -p 50000:50000 --name jenkins jenkins/jenkins:lts
+                docker stop myapp || true
+                docker rm myapp || true
+                docker build -t myapp .
+                docker run -d --name myapp -p 8080:8080 myapp
                 '''
             }
         }

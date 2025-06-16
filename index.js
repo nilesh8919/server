@@ -18,10 +18,10 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Basic route
 app.get('/', (req, res) => {
-  res.send('Node + MongoDB app is running6!');
+  res.send('Node + MongoDB app is running8!');
 });
 app.get('/getMsg', (req, res) => {
-    res.send('Node + MongoDB app is running6!');
+    res.send('Node + MongoDB app is running8!');
   });
 
   app.get('/employees', async (req, res) => {
