@@ -30,5 +30,12 @@ pipeline {
                 '''
             }
         }
+        stage('Deploy to EC2') {
+            steps {
+                sh '''
+                ssh -o StrictHostKeyChecking=no ec2-user@13.50.99.75 "cd /path/to/app && git pull origin main && docker restart app-container"
+                '''
+            }
+        }
     }
 }
