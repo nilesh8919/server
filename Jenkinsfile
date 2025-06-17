@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to Docker') {
+        stage('Deploy') {
             steps {
                 sh '''
                 docker stop myapp || true
