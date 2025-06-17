@@ -31,20 +31,10 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 sh '''
-                ssh -o StrictHostKeyChecking=no ec2-user@13.50.99.75 << EOF
-                  echo "🔁 Pulling latest code..."
-                  cd /path/to/server
-                  git pull origin main
-
-                  echo "🔁 Rebuilding Docker container..."
-                  docker stop app-container || true
-                  docker rm app-container || true
-                  docker build -t app-container .
-                  docker run -d --name app-container -p 8081:8080 app-container
-                  echo " EC2 Deployment Completed"
-                EOF
+                echo "Deploying to EC2..."
+                scp -i /path/to/node-key.pem -o StrictHostKeyChecking=no -r * ec2-user@13.50.99.75:/home/ec2-user/backend
+                ssh -i /path/to/node-key.pem -o StrictHostKeyChecking=no ec2-user@13.50.99.75 "cd /home/ec2-user/backend && pm2 restart all || docker-compose up -d --build"
                 '''
-                echo ' EC2 Deployment Triggered from Jenkins'
             }
         }
     }
