@@ -1,22 +1,19 @@
 pipeline {
     agent any
-     options {
-        skipDefaultCheckout()
+
+    triggers {
+        githubPush()
     }
+
     stages {
         stage('Checkout') {
             steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: 'https://github.com/nilesh8919/server.git']],
-                    doGenerateSubmoduleConfigurations: false,
-                    extensions: [[$class: 'WipeWorkspace']], // clears old code
-                ])
+                git branch: 'main',
+                    url: 'https://github.com/nilesh8919/server.git'
             }
         }
 
-        stage('Build') {
+        stage('Install') {
             steps {
                 sh 'npm install'
             }
@@ -28,20 +25,17 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                sh '''
-                docker stop myapp || true
-                docker rm myapp || true
-                docker build -t myapp .
-                docker run -d --name myapp -p 8080:8080 myapp
-                '''
-            }
-        }
         stage('Deploy to EC2') {
             steps {
                 sh '''
-                ssh -o StrictHostKeyChecking=no ec2-user@13.50.99.75 "cd /path/to/app && git pull origin main && docker restart app-container"
+                ssh -o StrictHostKeyChecking=no ec2-user@13.50.99.75 << EOF
+                  cd /path/to/app
+                  git pull origin main
+                  docker stop app-container || true
+                  docker rm app-container || true
+                  docker build -t app-container .
+                  docker run -d --name app-container -p 8080:8080 app-container
+                EOF
                 '''
             }
         }
