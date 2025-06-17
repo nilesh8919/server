@@ -33,14 +33,14 @@ pipeline {
                 sh '''
                 ssh -o StrictHostKeyChecking=no ec2-user@13.50.99.75 << EOF
                   echo "🔁 Pulling latest code..."
-                  cd /path/to/app
+                  cd /path/to/server
                   git pull origin main
 
                   echo "🔁 Rebuilding Docker container..."
                   docker stop app-container || true
                   docker rm app-container || true
                   docker build -t app-container .
-                  docker run -d --name app-container -p 8080:8080 app-container
+                  docker run -d --name app-container -p 8081:8080 app-container
                   echo " EC2 Deployment Completed"
                 EOF
                 '''
