@@ -1,10 +1,18 @@
 pipeline {
     agent any
-
+     options {
+        skipDefaultCheckout()
+    }
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/nilesh8919/server.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: 'https://github.com/nilesh8919/server.git']],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'WipeWorkspace']], // clears old code
+                ])
             }
         }
 
