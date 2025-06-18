@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Basic route
 app.get('/', (req, res) => {
-  res.send('Node + MongoDB app is running6!');
+  res.send('Node + MongoDB app is running2!');
 });
 app.get('/getMsg', (req, res) => {
     res.send('Node + MongoDB app is running5!');
