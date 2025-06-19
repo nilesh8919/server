@@ -20,9 +20,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Node + MongoDB app is running3!');
 });
-app.get('/getMsg', (req, res) => {
-    res.send('Node + MongoDB app is running5!');
-  });
+
 
   app.get('/employees', async (req, res) => {
     try {
